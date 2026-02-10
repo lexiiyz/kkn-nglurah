@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Batch - Kopi Nglurah</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="dashboard-body">
+    
+    <header class="header no-print">
+        <div class="header-content">
+          <h3><i class="ri-plant-line"></i> Kopi Nglurah</h3>
+          <div class="user-menu">
+            <a href="history.html" class="btn-history" style="text-decoration: none; margin-right: 10px;">
+                <i class="ri-bar-chart-grouped-line"></i> Grafik & Data Real
+            </a>
+            <span id="userName" style="font-weight:600;">User</span>
+            <button id="logoutBtn" class="btn-logout"><i class="ri-logout-box-line"></i></button>
+            <button onclick="toggleTheme()" class="btn-outline" style="padding: 6px 10px; border-radius: 50%; margin-left: 5px;" title="Ganti Tema">
+                <i id="themeIcon" class="ri-moon-line"></i>
+            </button>
+          </div>
+        </div>
+    </header>
+
+    <main class="container">
+      
+      <div style="margin-bottom:20px;">
+        <a href="index.html" class="btn btn-secondary" style="padding:8px 15px; font-size:13px; text-decoration:none; display:inline-block;">&larr; Kembali ke Menu</a>
+      </div>
+
+      <div class="card fade-in">
+        <div class="header-content" style="justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>
+                <h2><i class="ri-instance-line"></i> Manajemen Batch</h2>
+                <p style="color:#666;">Pantau dan update status produksi.</p>
+            </div>
+            <button onclick="showNewBatchForm()" class="btn btn-primary"><i class="ri-add-line"></i> Batch Baru</button>
+        </div>
+
+        <!-- TABS -->
+        <div style="display:flex; gap:10px; border-bottom:1px solid #eee; margin-bottom:20px;">
+            <button onclick="switchTab('active')" id="tab-active" class="btn-tab active" style="padding:10px 20px; border:none; background:none; font-weight:600; cursor:pointer;">Batch Aktif</button>
+            <button onclick="switchTab('new')" id="tab-new" class="btn-tab" style="padding:10px 20px; border:none; background:none; font-weight:600; cursor:pointer;">Buat Baru</button>
+        </div>
+
+        <!-- SECTION: ACTIVE BATCHES -->
+        <div id="section-active" class="fade-in">
+            <div id="activeBatchesList" class="grid-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                <!-- Card Template (Injected via JS) -->
+                <div class="card" style="text-align:center; padding:40px;">
+                    <i class="ri-loader-4-line ri-spin" style="font-size:24px;"></i> Memuat data...
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: NEW BATCH FORM -->
+        <div id="section-new" class="hidden fade-in">
+            <div style="max-width: 600px; margin: 0 auto;">
+                <form onsubmit="handleCreateBatch(event)">
+                    <div class="form-group">
+                        <label>Nama Kelompok Tani</label>
+                        <input type="text" id="batch_nama" class="form-control" required placeholder="Contoh: Tani Makmur">
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Jumlah Cherry (kg)</label>
+                            <input type="number" id="batch_panen" class="form-control" required placeholder="50">
+                        </div>
+                        <div class="form-group">
+                            <label>Metode Pengolahan</label>
+                            <select id="batch_metode" class="form-control">
+                                <option value="fullwash">Full Wash</option>
+                                <option value="honey">Honey</option>
+                                <option value="natural">Natural</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Mulai Sortasi</label>
+                        <input type="date" id="batch_tgl_start" class="form-control" required>
+                    </div>
+
+                    <div class="action-buttons right">
+                        <button type="button" onclick="switchTab('active')" class="btn btn-secondary">Batal</button>
+                        <button type="submit" class="btn btn-success"><i class="ri-save-line"></i> Mulai Batch Produksi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- MODAL UPDATE PROGRESS -->
+    <div id="updateModal" class="modal hidden">
+        <div class="modal-content card">
+            <div class="modal-header">
+                <h3>🔄 Update Progress <span id="updateBatchId" style="font-size:0.8em; color:#999;"></span></h3>
+                <button onclick="closeUpdateModal()" class="close-btn">&times;</button>
+            </div>
+            
+            <div style="background:#f9fafb; padding:15px; border-radius:8px; margin-bottom:15px;">
+                <p>Status Saat Ini: <b id="currentStatusBadge" class="badge">Sortasi</b></p>
+                <p style="margin-top:5px; font-size:14px;">Lanjut ke tahap: <b id="nextStageName" style="color:#10b981;">Fermentasi</b></p>
+            </div>
+
+            <form onsubmit="handleUpdateProgress(event)">
+                <input type="hidden" id="update_id">
+                <input type="hidden" id="update_current_stage">
+
+                <div class="form-group">
+                    <label>Tanggal Selesai <span id="lblCurrentStage">Sortasi</span></label>
+                    <input type="date" id="update_tgl_selesai" class="form-control" required>
+                </div>
+
+                <!-- Input Hasil Akhir (Hanya jika tahap terakhir / Packing) -->
+                <div id="inputFinalOutput" class="hidden form-group">
+                    <label>Hasil Bubuk / Green Bean (kg)</label>
+                    <input type="number" id="update_output_kg" class="form-control" placeholder="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Catatan (Opsional)</label>
+                    <textarea id="update_catatan" class="form-control" rows="2" placeholder="Kondisi cuaca, kendala, dll..."></textarea>
+                </div>
+
+                <div class="action-buttons right">
+                    <button type="button" onclick="closeUpdateModal()" class="btn btn-secondary">Batal</button>
+                    <button type="submit" class="btn btn-primary" id="btnSubmitUpdate">Simpan & Lanjut</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/modules/batch-manager.js"></script>
+    <script>
+        // Simple Theme & Logout Handler for this page
+        // Note: Main auth logic is in auth.js, but UI toggles might need helper
+        // Re-using main.js logic or duplicating minimal needed here
+        
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcon(isDark);
+        }
+
+        function updateThemeIcon(isDark) {
+            const icon = document.getElementById('themeIcon');
+            if(icon) icon.className = isDark ? 'ri-sun-line' : 'ri-moon-line';
+        }
+
+        // Init Theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            updateThemeIcon(true);
+        }
+
+        // Logout UI
+        const logoutBtn = document.getElementById('logoutBtn');
+        if(logoutBtn) {
+            logoutBtn.onclick = () => {
+                if(confirm("Yakin ingin keluar?")) {
+                    import('./js/auth.js').then(module => module.logout());
+                }
+            };
+        }
+    </script>
+  </body>
+</html>

@@ -44,11 +44,11 @@
                   <button class="btn btn-primary" style="margin-top:20px; width:100%;">Mulai Hitung</button>
               </div>
 
-              <div onclick="bukaMode('real')" style="cursor:pointer; border:2px solid #eee; padding:30px; border-radius:15px; transition:0.2s; background:#fff;" onmouseover="this.style.borderColor='#10b981'; this.style.transform='translateY(-5px)'" onmouseout="this.style.borderColor='#eee'; this.style.transform='translateY(0)'">
+              <div onclick="window.location.href='batch.html'" style="cursor:pointer; border:2px solid #eee; padding:30px; border-radius:15px; transition:0.2s; background:#fff;" onmouseover="this.style.borderColor='#10b981'; this.style.transform='translateY(-5px)'" onmouseout="this.style.borderColor='#eee'; this.style.transform='translateY(0)'">
                   <div style="font-size:40px; margin-bottom:15px; color:#10b981;"><i class="ri-file-list-3-line"></i></div>
-                  <h3 style="margin:10px 0; color:#333;">Input Data Real</h3>
-                  <p style="font-size:13px; color:#666;">Catat hasil panen & tanggal asli lapangan.</p>
-                  <button class="btn btn-success" style="margin-top:20px; width:100%;">Catat Data</button>
+                  <h3 style="margin:10px 0; color:#333;">Manajemen Batch</h3>
+                  <p style="font-size:13px; color:#666;">Input & Tracking Produksi (Real Time).</p>
+                  <button class="btn btn-success" style="margin-top:20px; width:100%;">Buka Dashboard</button>
               </div>
           </div>
       </section>
@@ -81,7 +81,17 @@
                 <option value="natural">Natural</option>
               </select>
             </div>
-            <div class="form-group"><label>Cuaca</label><select id="cuaca" class="form-control"><option value="cerah">Cerah</option><option value="hujan">Hujan</option></select></div>
+            <div class="form-group">
+                <label>Cuaca</label>
+                <div style="display:flex; gap:5px;">
+                    <select id="cuaca" class="form-control">
+                        <option value="cerah">Cerah</option>
+                        <option value="hujan">Hujan</option>
+                        <option value="mendung">Mendung</option>
+                    </select>
+                    <button onclick="getAutoWeather()" class="btn btn-outline" style="padding:0 10px;" title="Cek Cuaca Otomatis"><i class="ri-settings-line"></i> Auto</button>
+                </div>
+            </div>
             <div class="form-group"><label>Alat</label><select id="alat" class="form-control"><option value="lengkap">Mesin</option><option value="manual">Manual</option></select></div>
           </div>
           
@@ -126,77 +136,8 @@
         </div>
       </section>
 
-      <section id="realSection" class="card hidden fade-in">
-        <div style="margin-bottom:20px;">
-            <button onclick="kembaliKeMenu()" class="btn btn-secondary" style="padding:8px 15px; font-size:13px;">&larr; Kembali ke Menu</button>
-        </div>
-        
-        <div class="step-header">
-            <h3><i class="ri-file-edit-line"></i> Input Data Lapangan (Real)</h3>
-            <p class="step-indicator">Masukkan data fakta yang terjadi di lapangan untuk arsip.</p>
-        </div>
-
-        <form onsubmit="simpanDataReal(event)">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Nama Kelompok</label>
-                    <input type="text" id="real_nama" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Jumlah Panen (kg)</label>
-                    <input type="number" id="real_panen" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Metode</label>
-                    <select id="real_metode" class="form-control">
-                        <option value="fullwash">Full Wash</option>
-                        <option value="honey">Honey</option>
-                        <option value="natural">Natural</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Hasil Akhir Bubuk (kg)</label>
-                    <input type="number" id="real_hasil" class="form-control" placeholder="Contoh: 15" required>
-                </div>
-            </div>
-
-            <div style="background:#f9fafb; padding:15px; border-radius:10px; border:1px solid #eee; margin-bottom:20px;">
-                <p style="font-weight:600; margin-bottom:15px; color:#6F4E37;">📅 Tanggal Selesai Tahapan:</p>
-                
-                <div class="form-group">
-                    <label>1. Tanggal Mulai Panen</label>
-                    <input type="date" id="real_tgl_start" class="form-control" required>
-                </div>
-                
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>2. Selesai Fermentasi</label>
-                        <input type="date" id="real_tgl_fermentasi" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>3. Selesai Penjemuran</label>
-                        <input type="date" id="real_tgl_jemur" class="form-control" required>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>4. Selesai Packing (Finish)</label>
-                    <input type="date" id="real_tgl_finish" class="form-control" required>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-success" style="width:100%; justify-content:center;">
-                <i class="ri-save-line"></i> Simpan ke Database
-            </button>
-        </form>
-      </section>
 
     </main>
-
-
-
-    <!-- History Modal Removed (Now using history.html) -->
-
 
     <!-- Detail Modal -->
     <div id="detailModal" class="modal hidden">
@@ -207,7 +148,9 @@
             </div>
             <div id="detailContent"></div>
             <div class="action-buttons right">
-                <button onclick="tutupDetail()" class="btn btn-primary">Tutup</button>
+                <button onclick="downloadDetailPDF()" class="btn btn-outline"><i class="ri-file-download-line"></i> Download PDF</button>
+                <button onclick="editDataReal()" class="btn btn-warning" id="btnEditData"><i class="ri-pencil-line"></i> Edit Data</button>
+                <button onclick="tutupDetail()" class="btn btn-secondary">Tutup</button>
             </div>
         </div>
     </div>

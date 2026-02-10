@@ -38,7 +38,7 @@
         </div>
 
         <div id="historyContent" class="hidden">
-            <div style="max-width: 300px; margin: 0 auto 30px auto; text-align:center;">
+            <div style="max-width: 300px; height: 300px; margin: 0 auto 30px auto; text-align:center; position: relative;">
                 <h5 style="margin-bottom:10px; color:#666;">Frekuensi Metode</h5>
                 <canvas id="frequencyChart"></canvas>
             </div>
@@ -78,7 +78,9 @@
             </div>
             <div id="detailContent"></div>
             <div class="action-buttons right">
-                <button onclick="tutupDetail()" class="btn btn-primary">Tutup</button>
+                <button onclick="downloadDetailPDF()" class="btn btn-outline"><i class="ri-file-download-line"></i> Download PDF</button>
+                <button onclick="editDataReal()" class="btn btn-warning" id="btnEditData"><i class="ri-pencil-line"></i> Edit Data</button>
+                <button onclick="tutupDetail()" class="btn btn-secondary">Tutup</button>
             </div>
         </div>
     </div>
