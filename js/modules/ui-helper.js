@@ -188,21 +188,27 @@ export function renderDetailModal(item) {
             <div class="detail-row"><span class="detail-label">Hasil Bubuk</span><span class="detail-value">${formatNumber(item.input.manualOutput)} kg</span></div>
         </div>
 
-        <div style="margin-top:20px; border-top:1px solid #eee; padding-top:10px;">
-            <p style="font-weight:600; font-size:13px; color:#555;">📅 Rincian Tahapan:</p>
-            <table style="width:100%; font-size:12px; margin-top:5px; border-collapse:collapse;">
-                <tr style="background:#f9f9f9; text-align:left;"><th style="padding:5px;">Tahap</th><th>Mulai</th><th>Selesai</th></tr>
-                <tr><td style="padding:5px;">Sortasi</td><td>${showDate(t.sortasi_mulai)}</td><td>${showDate(t.sortasi_selesai)}</td></tr>
-                <tr><td style="padding:5px;">Fermentasi</td><td>${showDate(t.fermentasi_mulai)}</td><td>${showDate(t.fermentasi_selesai)}</td></tr>
-                <tr><td style="padding:5px;">Penjemuran</td><td>${showDate(t.jemur_mulai)}</td><td>${showDate(t.jemur_selesai)}</td></tr>
-                <tr><td style="padding:5px;">Roasting</td><td>${showDate(t.roasting_mulai)}</td><td>${showDate(t.roasting_selesai)}</td></tr>
-                <tr><td style="padding:5px;">Pengemasan</td><td>${showDate(t.kemas_mulai)}</td><td>${showDate(t.kemas_selesai)}</td></tr>
-            </table>
+        <div class="detail-schedule">
+            <p class="detail-schedule-title">📅 Rincian Tahapan</p>
+            <div class="table-responsive">
+                <table class="tabel detail-tabel">
+                    <thead>
+                        <tr><th>Tahap</th><th>Mulai</th><th>Selesai</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Sortasi</td><td>${showDate(t.sortasi_mulai)}</td><td>${showDate(t.sortasi_selesai)}</td></tr>
+                        <tr><td>Fermentasi</td><td>${showDate(t.fermentasi_mulai)}</td><td>${showDate(t.fermentasi_selesai)}</td></tr>
+                        <tr><td>Penjemuran</td><td>${showDate(t.jemur_mulai)}</td><td>${showDate(t.jemur_selesai)}</td></tr>
+                        <tr><td>Roasting</td><td>${showDate(t.roasting_mulai)}</td><td>${showDate(t.roasting_selesai)}</td></tr>
+                        <tr><td>Pengemasan</td><td>${showDate(t.kemas_mulai)}</td><td>${showDate(t.kemas_selesai)}</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        ${item.catatan ? `<div style="margin-top:15px; background:#fff3cd; padding:10px; border-radius:6px; font-size:12px; color:#856404;"><b>Catatan:</b> ${item.catatan}</div>` : ''}
+        ${item.catatan ? `<div class="detail-notes"><b>Catatan:</b> ${item.catatan}</div>` : ''}
 
-        <div class="chart-container-detail" style="margin-top:15px;">
+        <div class="chart-container-detail">
             <canvas id="detailChart"></canvas>
         </div>
     `;

@@ -33,21 +33,21 @@
       
       <section id="menuSection" class="card fade-in center" style="text-align:center; padding: 50px 20px;">
           <h2 style="margin-bottom:10px;">Halo, Petani!</h2>
-          <p style="color:#666; margin-bottom:40px;">Pilih menu yang ingin Anda gunakan:</p>
+          <p style="color:var(--text-muted); margin-bottom:40px;">Pilih menu yang ingin Anda gunakan:</p>
           
           <div class="form-grid" style="max-width:600px; margin:0 auto;">
               
-              <div onclick="bukaMode('estimasi')" style="cursor:pointer; border:2px solid #eee; padding:30px; border-radius:15px; transition:0.2s; background:#fff;" onmouseover="this.style.borderColor='#6F4E37'; this.style.transform='translateY(-5px)'" onmouseout="this.style.borderColor='#eee'; this.style.transform='translateY(0)'">
-                  <div style="font-size:40px; margin-bottom:15px; color:#6F4E37;"><i class="ri-calculator-line"></i></div>
-                  <h3 style="margin:10px 0; color:#333;">Kalkulator Estimasi</h3>
-                  <p style="font-size:13px; color:#666;">Prediksi jadwal & tanggal selesai kedepan.</p>
+              <div onclick="bukaMode('estimasi')" style="cursor:pointer; border:2px solid var(--border); padding:30px; border-radius:15px; transition:0.2s; background:var(--card-bg);" onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-5px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
+                  <div style="font-size:40px; margin-bottom:15px; color:var(--primary);"><i class="ri-calculator-line"></i></div>
+                  <h3 style="margin:10px 0; color:var(--text);">Kalkulator Estimasi</h3>
+                  <p style="font-size:13px; color:var(--text-muted);">Prediksi jadwal & tanggal selesai kedepan.</p>
                   <button class="btn btn-primary" style="margin-top:20px; width:100%;">Mulai Hitung</button>
               </div>
 
-              <div onclick="window.location.href='batch.html'" style="cursor:pointer; border:2px solid #eee; padding:30px; border-radius:15px; transition:0.2s; background:#fff;" onmouseover="this.style.borderColor='#10b981'; this.style.transform='translateY(-5px)'" onmouseout="this.style.borderColor='#eee'; this.style.transform='translateY(0)'">
+              <div onclick="window.location.href='batch.html'" style="cursor:pointer; border:2px solid var(--border); padding:30px; border-radius:15px; transition:0.2s; background:var(--card-bg);" onmouseover="this.style.borderColor='#10b981'; this.style.transform='translateY(-5px)'" onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'">
                   <div style="font-size:40px; margin-bottom:15px; color:#10b981;"><i class="ri-file-list-3-line"></i></div>
-                  <h3 style="margin:10px 0; color:#333;">Manajemen Batch</h3>
-                  <p style="font-size:13px; color:#666;">Input & Tracking Produksi (Real Time).</p>
+                  <h3 style="margin:10px 0; color:var(--text);">Manajemen Batch</h3>
+                  <p style="font-size:13px; color:var(--text-muted);">Input & Tracking Produksi (Real Time).</p>
                   <button class="btn btn-success" style="margin-top:20px; width:100%;">Buka Dashboard</button>
               </div>
           </div>
@@ -108,7 +108,7 @@
         </div>
 
         <div id="hasilEstimasi" class="hidden">
-            <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+            <hr style="margin:20px 0; border:0; border-top:1px solid var(--border);">
             <div class="section-header">
                 <h3>Hasil Prediksi Jadwal</h3>
             </div>
@@ -116,7 +116,7 @@
             <div id="ringkasanOutput" class="summary-box"></div>
             
             <!-- Chart Estimasi -->
-            <div style="margin:20px 0; padding:15px; border:1px solid #eee; border-radius:10px;">
+            <div style="margin:20px 0; padding:15px; border:1px solid var(--border); border-radius:10px;">
                 <h5 class="center" style="margin-bottom:10px;">Grafik Estimasi Panen vs Hasil</h5>
                 <canvas id="estimasiChart" style="max-height:250px;"></canvas>
             </div>
