@@ -1,0 +1,14 @@
+{
+  "name": "web-desa-kopi",
+  "version": "1.0.0",
+  "description": "Dashboard Produksi Kopi Nglurah",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

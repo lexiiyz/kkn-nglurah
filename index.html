@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Produksi - Kopi Nglurah</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="dashboard-body">
+    
+    <header class="header no-print">
+      <div class="header-content">
+        <h3><i class="ri-plant-line"></i> Kopi Nglurah</h3>
+        <div class="user-menu">
+          <a href="history.html" class="btn-history" style="text-decoration: none;">
+            <i class="ri-bar-chart-grouped-line"></i> Grafik & Data Real
+          </a>
+          <span id="userName" style="font-weight:600;">User</span>
+          <button id="logoutBtn" class="btn-logout"><i class="ri-logout-box-line"></i></button>
+          <button onclick="toggleTheme()" class="btn-outline" style="padding: 6px 10px; border-radius: 50%; margin-left: 5px;" title="Ganti Tema">
+            <i id="themeIcon" class="ri-moon-line"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      
+      <section id="menuSection" class="card fade-in center" style="text-align:center; padding: 50px 20px;">
+          <h2 style="margin-bottom:10px;">Halo, Petani!</h2>
+          <p style="color:#666; margin-bottom:40px;">Pilih menu yang ingin Anda gunakan:</p>
+          
+          <div class="form-grid" style="max-width:600px; margin:0 auto;">
+              
+              <div onclick="bukaMode('estimasi')" style="cursor:pointer; border:2px solid #eee; padding:30px; border-radius:15px; transition:0.2s; background:#fff;" onmouseover="this.style.borderColor='#6F4E37'; this.style.transform='translateY(-5px)'" onmouseout="this.style.borderColor='#eee'; this.style.transform='translateY(0)'">
+                  <div style="font-size:40px; margin-bottom:15px; color:#6F4E37;"><i class="ri-calculator-line"></i></div>
+                  <h3 style="margin:10px 0; color:#333;">Kalkulator Estimasi</h3>
+                  <p style="font-size:13px; color:#666;">Prediksi jadwal & tanggal selesai kedepan.</p>
+                  <button class="btn btn-primary" style="margin-top:20px; width:100%;">Mulai Hitung</button>
+              </div>
+
+              <div onclick="bukaMode('real')" style="cursor:pointer; border:2px solid #eee; padding:30px; border-radius:15px; transition:0.2s; background:#fff;" onmouseover="this.style.borderColor='#10b981'; this.style.transform='translateY(-5px)'" onmouseout="this.style.borderColor='#eee'; this.style.transform='translateY(0)'">
+                  <div style="font-size:40px; margin-bottom:15px; color:#10b981;"><i class="ri-file-list-3-line"></i></div>
+                  <h3 style="margin:10px 0; color:#333;">Input Data Real</h3>
+                  <p style="font-size:13px; color:#666;">Catat hasil panen & tanggal asli lapangan.</p>
+                  <button class="btn btn-success" style="margin-top:20px; width:100%;">Catat Data</button>
+              </div>
+          </div>
+      </section>
+
+      <section id="estimasiSection" class="card hidden fade-in">
+        <div style="margin-bottom:20px;">
+            <button onclick="kembaliKeMenu()" class="btn btn-secondary" style="padding:8px 15px; font-size:13px;">&larr; Kembali ke Menu</button>
+        </div>
+
+        <div id="wizard-step-1" class="wizard-step">
+          <div class="step-header">
+            <h3><i class="ri-calculator-line"></i> Kalkulator Estimasi</h3>
+            <p class="step-indicator">Masukkan rencana panen untuk prediksi jadwal</p>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+                <label>Nama Kelompok</label>
+                <input type="text" id="nama_kelompok" class="form-control" placeholder="Maju Jaya">
+            </div>
+            <div class="form-group">
+                <label>Jumlah Panen (kg)</label>
+                <input type="number" id="panen" class="form-control" placeholder="50">
+            </div>
+            <div class="form-group">
+              <label>Metode</label>
+              <select id="metode" class="form-control">
+                <option value="fullwash">Full Wash</option>
+                <option value="honey">Honey</option>
+                <option value="natural">Natural</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Cuaca</label><select id="cuaca" class="form-control"><option value="cerah">Cerah</option><option value="hujan">Hujan</option></select></div>
+            <div class="form-group"><label>Alat</label><select id="alat" class="form-control"><option value="lengkap">Mesin</option><option value="manual">Manual</option></select></div>
+          </div>
+          
+          <div class="right"><button onclick="showStep(2)" class="btn btn-primary">Lanjut &rarr;</button></div>
+        </div>
+
+        <div id="wizard-step-2" class="hidden">
+           <div class="step-header"><h3>Rencana Tanggal Mulai</h3></div>
+           <div class="form-group"><input type="date" id="tgl_start_produksi" class="form-control"></div>
+           <div class="action-buttons spread">
+               <button onclick="showStep(1)" class="btn btn-secondary">Back</button>
+               <button onclick="hitungJadwal()" class="btn btn-primary">⚡ Hitung Estimasi</button>
+           </div>
+        </div>
+
+        <div id="hasilEstimasi" class="hidden">
+            <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+            <div class="section-header">
+                <h3>Hasil Prediksi Jadwal</h3>
+            </div>
+            
+            <div id="ringkasanOutput" class="summary-box"></div>
+            
+            <!-- Chart Estimasi -->
+            <div style="margin:20px 0; padding:15px; border:1px solid #eee; border-radius:10px;">
+                <h5 class="center" style="margin-bottom:10px;">Grafik Estimasi Panen vs Hasil</h5>
+                <canvas id="estimasiChart" style="max-height:250px;"></canvas>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="tabel" id="tabelJadwal">
+                    <thead><tr><th>Tahap</th><th>Mulai</th><th>Selesai</th><th>Durasi</th><th>Ket</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            
+            <div class="action-buttons right">
+                <button onclick="window.print()" class="btn btn-outline"><i class="ri-printer-line"></i> Cetak PDF</button>
+                <button onclick="kirimWA()" class="btn" style="background:#25D366; color:white;"><i class="ri-whatsapp-line"></i> Kirim WA</button>
+                <button onclick="location.reload()" class="btn btn-secondary">🔄 Reset</button>
+            </div>
+        </div>
+      </section>
+
+      <section id="realSection" class="card hidden fade-in">
+        <div style="margin-bottom:20px;">
+            <button onclick="kembaliKeMenu()" class="btn btn-secondary" style="padding:8px 15px; font-size:13px;">&larr; Kembali ke Menu</button>
+        </div>
+        
+        <div class="step-header">
+            <h3><i class="ri-file-edit-line"></i> Input Data Lapangan (Real)</h3>
+            <p class="step-indicator">Masukkan data fakta yang terjadi di lapangan untuk arsip.</p>
+        </div>
+
+        <form onsubmit="simpanDataReal(event)">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nama Kelompok</label>
+                    <input type="text" id="real_nama" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Panen (kg)</label>
+                    <input type="number" id="real_panen" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Metode</label>
+                    <select id="real_metode" class="form-control">
+                        <option value="fullwash">Full Wash</option>
+                        <option value="honey">Honey</option>
+                        <option value="natural">Natural</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Hasil Akhir Bubuk (kg)</label>
+                    <input type="number" id="real_hasil" class="form-control" placeholder="Contoh: 15" required>
+                </div>
+            </div>
+
+            <div style="background:#f9fafb; padding:15px; border-radius:10px; border:1px solid #eee; margin-bottom:20px;">
+                <p style="font-weight:600; margin-bottom:15px; color:#6F4E37;">📅 Tanggal Selesai Tahapan:</p>
+                
+                <div class="form-group">
+                    <label>1. Tanggal Mulai Panen</label>
+                    <input type="date" id="real_tgl_start" class="form-control" required>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>2. Selesai Fermentasi</label>
+                        <input type="date" id="real_tgl_fermentasi" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>3. Selesai Penjemuran</label>
+                        <input type="date" id="real_tgl_jemur" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>4. Selesai Packing (Finish)</label>
+                    <input type="date" id="real_tgl_finish" class="form-control" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success" style="width:100%; justify-content:center;">
+                <i class="ri-save-line"></i> Simpan ke Database
+            </button>
+        </form>
+      </section>
+
+    </main>
+
+
+
+    <!-- History Modal Removed (Now using history.html) -->
+
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal hidden">
+        <div class="modal-content card">
+            <div class="modal-header">
+                <h3>📋 Detail Data Real</h3>
+                <button onclick="tutupDetail()" class="close-btn">&times;</button>
+            </div>
+            <div id="detailContent"></div>
+            <div class="action-buttons right">
+                <button onclick="tutupDetail()" class="btn btn-primary">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="modal hidden">
+        <div class="modal-content card" style="max-width:400px; text-align:center;">
+            <div style="font-size:3rem; color:#ef4444; margin-bottom:10px;"><i class="ri-logout-circle-line"></i></div>
+            <h3>Konfirmasi Logout</h3>
+            <p style="color:#666; margin-bottom:20px;">Anda yakin ingin keluar dari aplikasi?</p>
+            <div class="action-buttons spread">
+                <button onclick="document.getElementById('logoutModal').style.display='none'" class="btn btn-secondary">Batal</button>
+                <button onclick="confirmLogout()" class="btn btn-logout">Ya, Keluar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="js/toast.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

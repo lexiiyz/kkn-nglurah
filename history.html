@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Produksi - Kopi Nglurah</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="dashboard-body">
+    <header class="header no-print">
+      <div class="header-content">
+        <h3><i class="ri-history-line" style="vertical-align: middle; margin-right: 5px;"></i> Riwayat Produksi</h3>
+        <div class="user-menu">
+          <a href="index.html" class="btn-history" style="text-decoration: none;">
+            <i class="ri-home-line"></i> Home
+          </a>
+          
+          <span id="userName" style="font-weight:600;">User</span>
+          <button id="logoutBtn" class="btn-logout"><i class="ri-logout-box-r-line"></i> Logout</button>
+          <button onclick="toggleTheme()" class="btn-outline" style="padding: 6px 10px; border-radius: 50%; margin-left: 5px;" title="Ganti Tema">
+            <i id="themeIcon" class="ri-moon-line"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      
+      <section id="historySection" class="card fade-in">
+        <div class="section-header">
+            <h3>Data Riwayat Produksi</h3>
+            <p id="loadingText" style="text-align:center; color:#666;">Mengambil data...</p>
+        </div>
+
+        <div id="historyContent" class="hidden">
+            <div style="max-width: 300px; margin: 0 auto 30px auto; text-align:center;">
+                <h5 style="margin-bottom:10px; color:#666;">Frekuensi Metode</h5>
+                <canvas id="frequencyChart"></canvas>
+            </div>
+
+            <div class="table-responsive">
+                <table class="tabel" id="tabelHistory">
+                    <thead>
+                        <tr>
+                            <th>Tanggal Simpan</th>
+                            <th>Kelompok Tani</th>
+                            <th>Jumlah (kg)</th>
+                            <th>Metode</th>
+                            <th>Hasil Bubuk (kg)</th>
+                            <th>Tanggal Selesai</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="ri-moon-line" id="themeIcon"></i>
+    </div>
+
+    <!-- DETAIL MODAL (Popup) -->
+    <div id="detailModal" class="modal hidden">
+        <div class="modal-content card">
+            <div class="modal-header">
+                <h3>📋 Detail Data Real</h3>
+                <button onclick="tutupDetail()" class="close-btn">&times;</button>
+            </div>
+            <div id="detailContent"></div>
+            <div class="action-buttons right">
+                <button onclick="tutupDetail()" class="btn btn-primary">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGOUT CONFIRMATION MODAL -->
+    <div id="logoutModal" class="modal hidden">
+        <div class="modal-content card" style="max-width: 400px; text-align: center;">
+            <div style="margin-bottom: 20px;">
+                <i class="ri-error-warning-line" style="font-size: 3rem; color: #ef4444;"></i>
+            </div>
+            <h3 style="margin-bottom: 10px;">Konfirmasi Logout</h3>
+            <p style="color: #6b7280; margin-bottom: 25px;">Apakah Anda yakin ingin keluar dari aplikasi?</p>
+            
+            <div class="action-buttons spread">
+                <button onclick="document.getElementById('logoutModal').classList.add('hidden')" class="btn btn-secondary" style="width: 100%;">
+                    Batal
+                </button>
+                <button onclick="confirmLogout()" class="btn btn-logout" style="width: 100%; justify-content: center;">
+                    Ya, Keluar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
+    <script src="js/toast.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
