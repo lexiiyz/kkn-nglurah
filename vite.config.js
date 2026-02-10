@@ -9,6 +9,7 @@ export default defineConfig({
         landing: resolve(__dirname, 'landing.html'),
         login: resolve(__dirname, 'login.html'),
         history: resolve(__dirname, 'history.html'),
+        batch: resolve(__dirname, 'batch.html'),
       },
     },
   },
