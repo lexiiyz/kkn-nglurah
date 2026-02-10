@@ -1,4 +1,4 @@
-function createToastContainer() {
+export function createToastContainer() {
     if (!document.getElementById('toast-container')) {
         const container = document.createElement('div');
         container.id = 'toast-container';
@@ -6,9 +6,10 @@ function createToastContainer() {
     }
 }
 
-window.showToast = function(message, type = 'info') {
+export function showToast(message, type = 'info') {
     createToastContainer();
-    const container = document.getElementById('toast-container');
+    let container = document.getElementById('toast-container');
+    if (!container) return; // Safety check
     
     // Icon mapping
     const icons = {
@@ -37,4 +38,7 @@ window.showToast = function(message, type = 'info') {
         toast.classList.add('hide');
         toast.addEventListener('transitionend', () => toast.remove());
     }, 3500);
-};
+}
+
+// Attach to window just in case inline HTML needs it (optional, but good for backward compatibility during migration)
+window.showToast = showToast;

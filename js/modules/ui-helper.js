@@ -89,10 +89,4 @@ export function formatDate(dateString) {
 }
 
 // Wrapper for Global Toast
-export function showToast(message, type = 'info') {
-    if (window.showToast) {
-        window.showToast(message, type);
-    } else {
-        alert(`${type.toUpperCase()}: ${message}`);
-    }
-}
+export { showToast } from '../toast.js';

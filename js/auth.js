@@ -12,6 +12,7 @@ import {
     createUserWithEmailAndPassword, // <-- Import Baru
     signInWithEmailAndPassword      // <-- Import Baru
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { showToast } from "./toast.js";
 
 // --- KONFIGURASI FIREBASE (PASTE PUNYAMU YANG BENAR DISINI) ---
 const firebaseConfig = {
