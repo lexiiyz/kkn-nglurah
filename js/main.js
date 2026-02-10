@@ -453,6 +453,29 @@ window.showStep = (step) => {
     document.getElementById('wizard-step-2')?.classList.toggle('hidden', step !== 2);
 };
 
+window.getAutoWeather = async function() {
+    try {
+        UI.showToast("Mengecek cuaca...", "info");
+        // Nglurah, Karanganyar coordinates
+        const lat = -7.6;
+        const lon = 111.0;
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        const data = await res.json();
+        const code = data.current_weather.weathercode;
+
+        // WMO Weather Codes mapping
+        let cuaca = 'cerah';
+        if ([1, 2, 3, 45, 48].includes(code)) cuaca = 'mendung';
+        if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99].includes(code)) cuaca = 'hujan';
+
+        document.getElementById('cuaca').value = cuaca;
+        UI.showToast(`Cuaca terdeteksi: ${cuaca}`, "success");
+    } catch (e) {
+        console.error(e);
+        UI.showToast("Gagal cek cuaca otomatis.", "error");
+    }
+};
+
 window.toggleTheme = function() {
     const isDark = document.body.hasAttribute('data-theme');
     if (isDark) {
