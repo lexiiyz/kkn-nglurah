@@ -368,7 +368,69 @@ window.simpanDataReal = async function(e) {
     }
 };
 
+// Send Estimation to WhatsApp
+window.kirimWA = function() {
+    const est = currentState.lastEstimation;
+    if (!est) return UI.showToast("Hitung jadwal dulu!", "error");
 
+    const { input, output } = est;
+    const jadwal = output.jadwal || est.jadwal;
+
+    let msg = `☕ *ESTIMASI PRODUKSI KOPI*\n`;
+    msg += `━━━━━━━━━━━━━━━━━━\n`;
+    msg += `👤 Kelompok: ${input.namaKelompok}\n`;
+    msg += `📦 Jumlah Panen: ${input.jumlah} kg\n`;
+    msg += `⚙️ Metode: ${input.metode}\n`;
+    msg += `🌤️ Cuaca: ${input.cuaca}\n`;
+    msg += `📅 Mulai: ${input.tglStart}\n\n`;
+    msg += `📋 *JADWAL TAHAPAN:*\n`;
+
+    if (jadwal && jadwal.length) {
+        jadwal.forEach(j => {
+            msg += `▸ ${j.tahap}: ${j.mulai} → ${j.selesai} (${j.durasi} hari)\n`;
+        });
+    }
+
+    msg += `\n✅ Estimasi Selesai: ${output.tglSelesai}\n`;
+    msg += `⏱️ Total: ${output.totalHari} hari\n`;
+    msg += `📊 Estimasi Bubuk: ${output.estimasiBubuk} kg\n`;
+    msg += `━━━━━━━━━━━━━━━━━━\n`;
+    msg += `_Dikirim dari Dashboard Kopi Nglurah_`;
+
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+};
+
+// Send Detail History to WhatsApp
+window.kirimWADetail = function() {
+    const item = currentState.currentDetailItem;
+    if (!item) return;
+
+    const t = item.tahapan || {};
+    const inp = item.input || {};
+
+    let msg = `☕ *DATA PRODUKSI KOPI*\n`;
+    msg += `━━━━━━━━━━━━━━━━━━\n`;
+    msg += `👤 Kelompok: ${inp.namaKelompok || '-'}\n`;
+    msg += `📦 Jumlah Panen: ${inp.jumlah || 0} kg\n`;
+    msg += `⚙️ Metode: ${inp.metode || '-'}\n`;
+    msg += `📊 Hasil Bubuk: ${inp.manualOutput || 0} kg\n\n`;
+    msg += `📋 *TAHAPAN PRODUKSI:*\n`;
+    msg += `▸ Sortasi: ${t.sortasi_mulai || '-'} → ${t.sortasi_selesai || '-'}\n`;
+    msg += `▸ Fermentasi: ${t.fermentasi_mulai || '-'} → ${t.fermentasi_selesai || '-'}\n`;
+    msg += `▸ Penjemuran: ${t.jemur_mulai || '-'} → ${t.jemur_selesai || '-'}\n`;
+    msg += `▸ Roasting: ${t.roasting_mulai || '-'} → ${t.roasting_selesai || '-'}\n`;
+    msg += `▸ Pengemasan: ${t.kemas_mulai || '-'} → ${t.kemas_selesai || '-'}\n\n`;
+
+    if (item.catatan) {
+        msg += `📝 Catatan: ${item.catatan}\n\n`;
+    }
+
+    msg += `✅ Selesai: ${t.finish || '-'}\n`;
+    msg += `━━━━━━━━━━━━━━━━━━\n`;
+    msg += `_Dikirim dari Dashboard Kopi Nglurah_`;
+
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+};
 
 window.tutupDetail = () => document.getElementById('detailModal').style.display = 'none';
 
