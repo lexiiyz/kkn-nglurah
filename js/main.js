@@ -368,35 +368,7 @@ window.simpanDataReal = async function(e) {
     }
 };
 
-window.editDataReal = function() {
-    const item = currentState.currentDetailItem;
-    if(!item) return;
 
-    window.tutupDetail();
-    window.bukaMode('real');
-
-    // Populate Form using UI Helper
-    UI.setInputValue('real_id', item.id);
-    UI.setInputValue('real_nama', item.input.namaKelompok);
-    UI.setInputValue('real_panen', item.input.jumlah);
-    UI.setInputValue('real_metode', item.input.metode);
-    UI.setInputValue('real_hasil', item.input.manualOutput);
-    UI.setInputValue('catatan', item.catatan);
-
-    const t = item.tahapan || {};
-    UI.setInputValue('tgl_sortasi_mulai', t.sortasi_mulai);
-    UI.setInputValue('tgl_sortasi_selesai', t.sortasi_selesai);
-    UI.setInputValue('tgl_fermentasi_mulai', t.fermentasi_mulai);
-    UI.setInputValue('tgl_fermentasi_selesai', t.fermentasi_selesai);
-    UI.setInputValue('tgl_jemur_mulai', t.jemur_mulai);
-    UI.setInputValue('tgl_jemur_selesai', t.jemur_selesai);
-    UI.setInputValue('tgl_roasting_mulai', t.roasting_mulai);
-    UI.setInputValue('tgl_roasting_selesai', t.roasting_selesai);
-    UI.setInputValue('tgl_kemas_mulai', t.kemas_mulai);
-    UI.setInputValue('tgl_kemas_selesai', t.kemas_selesai || t.finish);
-
-    UI.showToast("Mode Edit Aktif", "info");
-};
 
 window.tutupDetail = () => document.getElementById('detailModal').style.display = 'none';
 
