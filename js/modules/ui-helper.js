@@ -193,20 +193,18 @@ export function renderDetailModal(item) {
             <div class="table-responsive">
                 <table class="tabel detail-tabel">
                     <thead>
-                        <tr><th>Tahap</th><th>Mulai</th><th>Selesai</th></tr>
+                        <tr><th>Tahap</th><th>Mulai</th><th>Selesai</th><th>Ket.</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>Sortasi</td><td>${showDate(t.sortasi_mulai)}</td><td>${showDate(t.sortasi_selesai)}</td></tr>
-                        <tr><td>Fermentasi</td><td>${showDate(t.fermentasi_mulai)}</td><td>${showDate(t.fermentasi_selesai)}</td></tr>
-                        <tr><td>Penjemuran</td><td>${showDate(t.jemur_mulai)}</td><td>${showDate(t.jemur_selesai)}</td></tr>
-                        <tr><td>Roasting</td><td>${showDate(t.roasting_mulai)}</td><td>${showDate(t.roasting_selesai)}</td></tr>
-                        <tr><td>Pengemasan</td><td>${showDate(t.kemas_mulai)}</td><td>${showDate(t.kemas_selesai)}</td></tr>
+                        <tr><td>Sortasi</td><td>${showDate(t.sortasi_mulai)}</td><td>${showDate(t.sortasi_selesai)}</td><td><small><i>${t.sortasi_catatan || '-'}</i></small></td></tr>
+                        <tr><td>Fermentasi</td><td>${showDate(t.fermentasi_mulai)}</td><td>${showDate(t.fermentasi_selesai)}</td><td><small><i>${t.fermentasi_catatan || '-'}</i></small></td></tr>
+                        <tr><td>Penjemuran</td><td>${showDate(t.jemur_mulai)}</td><td>${showDate(t.jemur_selesai)}</td><td><small><i>${t.jemur_catatan || '-'}</i></small></td></tr>
+                        <tr><td>Roasting</td><td>${showDate(t.roasting_mulai)}</td><td>${showDate(t.roasting_selesai)}</td><td><small><i>${t.roasting_catatan || '-'}</i></small></td></tr>
+                        <tr><td>Pengemasan</td><td>${showDate(t.kemas_mulai)}</td><td>${showDate(t.kemas_selesai)}</td><td><small><i>${t.kemas_catatan || '-'}</i></small></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
-        ${item.catatan ? `<div class="detail-notes"><b>Catatan:</b> ${item.catatan}</div>` : ''}
 
         <div class="chart-container-detail">
             <canvas id="detailChart"></canvas>

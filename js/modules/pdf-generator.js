@@ -104,38 +104,23 @@ export function generateDetailPDF(item) {
     // Schedule Table
     const t = item.tahapan || {};
     const datesBody = [
-        ['Sortasi', fmtDate(t.sortasi_mulai), fmtDate(t.sortasi_selesai)],
-        ['Fermentasi', fmtDate(t.fermentasi_mulai), fmtDate(t.fermentasi_selesai)],
-        ['Penjemuran', fmtDate(t.jemur_mulai), fmtDate(t.jemur_selesai)],
-        ['Roasting', fmtDate(t.roasting_mulai), fmtDate(t.roasting_selesai)],
-        ['Pengemasan', fmtDate(t.kemas_mulai), fmtDate(t.kemas_selesai)]
+        ['Sortasi', fmtDate(t.sortasi_mulai), fmtDate(t.sortasi_selesai), t.sortasi_catatan || '-'],
+        ['Fermentasi', fmtDate(t.fermentasi_mulai), fmtDate(t.fermentasi_selesai), t.fermentasi_catatan || '-'],
+        ['Penjemuran', fmtDate(t.jemur_mulai), fmtDate(t.jemur_selesai), t.jemur_catatan || '-'],
+        ['Roasting', fmtDate(t.roasting_mulai), fmtDate(t.roasting_selesai), t.roasting_catatan || '-'],
+        ['Pengemasan', fmtDate(t.kemas_mulai), fmtDate(t.kemas_selesai), t.kemas_catatan || '-']
     ];
 
     doc.text("Rekam Jejak Tanggal:", 14, doc.lastAutoTable.finalY + 12);
     
     doc.autoTable({
         startY: doc.lastAutoTable.finalY + 18,
-        head: [['Tahapan', 'Mulai', 'Selesai']],
+        head: [['Tahapan', 'Mulai', 'Selesai', 'Ket.']],
         body: datesBody,
         theme: 'grid',
-        headStyles: { fillColor: [34, 139, 34] } // Green
+        headStyles: { fillColor: [34, 139, 34] }, // Green
+        columnStyles: { 3: { fontStyle: 'italic', cellWidth: 40 } }
     });
-
-    // Notes
-    if(item.catatan) {
-        const yPos = doc.lastAutoTable.finalY + 12;
-        
-        doc.setFillColor(255, 243, 205); // Light yellow bg for notes
-        doc.rect(14, yPos, 182, 20, 'F');
-        
-        doc.setTextColor(133, 100, 4);
-        doc.setFontSize(10);
-        doc.text("Catatan:", 16, yPos + 6);
-        
-        // Handle long text wrapping
-        const splitText = doc.splitTextToSize(item.catatan, 175);
-        doc.text(splitText, 16, yPos + 12);
-    }
 
     doc.save(`Laporan_Detail_${item.input.namaKelompok}_${new Date().getTime()}.pdf`);
 }

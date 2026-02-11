@@ -116,6 +116,12 @@ window.handleCreateBatch = async function(e) {
     btn.innerText = "Processing...";
 
     const email = localStorage.getItem('userEmail');
+    const catatanAwal = document.getElementById('batch_catatan').value.trim();
+    const tahapanData = {
+        sortasi_mulai: document.getElementById('batch_tgl_start').value
+    };
+    if (catatanAwal) tahapanData.sortasi_catatan = catatanAwal;
+
     const data = {
         email: email,
         timestamp: new Date(),
@@ -125,9 +131,7 @@ window.handleCreateBatch = async function(e) {
             jumlah: parseInt(document.getElementById('batch_panen').value),
             metode: document.getElementById('batch_metode').value
         },
-        tahapan: {
-            sortasi_mulai: document.getElementById('batch_tgl_start').value
-        },
+        tahapan: tahapanData,
         logs: [
             { date: new Date(), action: 'Batch Created', note: 'Start Sortasi' }
         ]
@@ -232,11 +236,13 @@ window.handleUpdateProgress = async function(e) {
             const { getBatchById } = await import('./database.js'); 
             const batchData = await getBatchById(currentBatchId);
 
-            // Sanitize Catatan (Ensure string or null, never undefined)
-            const newNote = catatan ? String(catatan) : "";
-            const finalCatatan = batchData.catatan 
-                ? batchData.catatan + (newNote ? "\n" + newNote : "")
-                : newNote;
+            const finalTahapan = {
+                ...batchData.tahapan,
+                [`${currentStage}_selesai`]: tglSelesai,
+                finish: tglSelesai
+            };
+            // Save catatan for final stage
+            if (catatan) finalTahapan[`${currentStage}_catatan`] = catatan;
 
             const finalData = {
                 ...batchData,
@@ -245,14 +251,9 @@ window.handleUpdateProgress = async function(e) {
                 },
                 input: { 
                     ...batchData.input, 
-                    manualOutput: outputKg ? parseInt(outputKg) : 0 
+                    manualOutput: outputKg ? parseFloat(outputKg) : 0 
                 },
-                tahapan: {
-                    ...batchData.tahapan,
-                    [`${currentStage}_selesai`]: tglSelesai,
-                    finish: tglSelesai
-                },
-                catatan: finalCatatan || "" // Ensure empty string if null
+                tahapan: finalTahapan
             };
             
             // Clean up ID before saving as new doc
@@ -264,11 +265,8 @@ window.handleUpdateProgress = async function(e) {
         } else {
             // NORMAL UPDATE
             if (catatan) {
-                // If there's a note during intermediate stage, append it?
-                // For now, let's just update the status. 
-                // To support notes in intermediate stages, we'd need to fetch+update or use arrayUnion logs.
-                // Simplified: Ignore intermediate notes OR fetch-update.
-                // Let's safe-guard against undefined in payload just in case we extend it.
+                // Save catatan per-stage
+                updatePayload[`tahapan.${currentStage}_catatan`] = catatan;
             }
             
             await updateBatch(currentBatchId, updatePayload);
