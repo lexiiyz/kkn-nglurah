@@ -96,13 +96,14 @@ window.hitungJadwal = function() {
     UI.renderScheduleTable(hasil.jadwal);
     UI.renderEstimationSummary(hasil.tglSelesai, hasil.totalHari, hasil.estimasiBubuk);
     
-    // 5. Switch View & Render Chart
+    // 5. Switch View 
     document.getElementById("wizard-step-2").classList.add('hidden');
     document.getElementById("hasilEstimasi").classList.remove('hidden');
 
-    setTimeout(() => {
-        UI.renderHarvestChart('estimasiChart', input.jumlah, input.metode, hasil.estimasiBubuk);
-    }, 100);
+    // Chart dihapus sesuai request
+    // setTimeout(() => {
+    //     UI.renderHarvestChart('estimasiChart', input.jumlah, input.metode, hasil.estimasiBubuk);
+    // }, 100);
 };
 
 // ==========================================
